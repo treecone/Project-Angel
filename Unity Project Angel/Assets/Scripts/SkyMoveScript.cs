@@ -5,7 +5,7 @@ using UnityEngine;
 public class SkyMoveScript : MonoBehaviour {
 
     public bool colLeft, colRight, colBottom, colTop;
-    public float verticalSpeed, horizontalSpeed;
+    public float verticalVelocity, horizontalVelocity;
     public float jumpForce, speed;
     public float gravity;
     public GameObject lastTouchingCollider;
@@ -35,52 +35,64 @@ public class SkyMoveScript : MonoBehaviour {
     void Movement ()
     {
         //Moving because of gravity
-        gameObject.transform.Translate(Vector2.up * verticalSpeed * Time.deltaTime);
-        gameObject.transform.Translate(Vector2.right * horizontalSpeed * Time.deltaTime);
+        gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
+        gameObject.transform.Translate(Vector2.right * horizontalVelocity * Time.deltaTime);
 
         //Applying gravity
         if (colBottom)
         {
-            if(verticalSpeed < 0)
-            verticalSpeed = 0;
+            if(verticalVelocity < 0)
+            verticalVelocity = 0;
         }
         else if (colRight || colLeft)
         {
-            verticalSpeed -= (gravity / 20);
+            verticalVelocity -= (gravity / 20);
         }
         else
         {
-            verticalSpeed -= gravity;
+            verticalVelocity -= gravity;
         }
 
         //Stopping player when running into wall
-        if (colRight) { if(horizontalSpeed > 0.05f) { horizontalSpeed = 0; verticalSpeed = 0; } }
-        if (colLeft) { if (horizontalSpeed < -0.05f) { horizontalSpeed = 0; verticalSpeed = 0; } }
-        if (colTop) { if (verticalSpeed > 0.05f) { verticalSpeed = 0; } }
+        if (colRight) { if(horizontalVelocity > 0.05f) { horizontalVelocity = 0; verticalVelocity = 0; } }
+        if (colLeft) { if (horizontalVelocity < -0.05f) { horizontalVelocity = 0; verticalVelocity = 0; } }
+        if (colTop) { if (verticalVelocity > 0.05f) { verticalVelocity = 0; } }
     }
 
     void MovementInput ()
     {
         //Jump
-        if(Input.GetKeyDown (KeyCode.Space) && (colBottom || (colRight || colLeft)))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            verticalSpeed = jumpForce;
+            if (colBottom)
+            {
+                verticalVelocity = jumpForce;
+            }
+            else if (colRight)
+            {
+                verticalVelocity = jumpForce;
+                horizontalVelocity = -5;
+            }
+            else if (colLeft)
+            {
+                horizontalVelocity = 5;
+            }
         }
 
         //Left and Right
         if (Input.GetKey(KeyCode.A) && !colLeft)
         {
-            horizontalSpeed = -speed;
+            horizontalVelocity = -speed;
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
         if (Input.GetKey(KeyCode.D) && !colRight)
         {
-            horizontalSpeed = speed;
+            horizontalVelocity = speed;
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
         }
-        if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false)
+        if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false && colBottom)
         {
-            horizontalSpeed = 0;
+            horizontalVelocity = 0;
         }
     }
 

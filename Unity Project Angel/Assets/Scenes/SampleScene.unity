@@ -244,8 +244,8 @@ MonoBehaviour:
   colRight: 0
   colBottom: 0
   colTop: 0
-  verticalSpeed: 0
-  horizontalSpeed: 0
+  verticalVelocity: 0
+  horizontalVelocity: 0
   jumpForce: 8
   speed: 5
   gravity: 0.3
