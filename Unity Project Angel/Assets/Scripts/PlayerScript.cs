@@ -2,43 +2,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerScript : MonoBehaviour {
+public class PlayerScript : PhysicsScript {
 
-    public float horizontalSpeed;
-    public float jumpForce;
-    Rigidbody2D rb;
+    public bool allowMovement;
+    public float jumpForce, speed;
 
-
-    void Start ()
+    public override void Start ()
     {
-        rb = gameObject.GetComponent<Rigidbody2D>();
+        base.Start();
 	}
 	
-	void Update ()
+	public override void Update ()
     {
-        Movement();
+        base.Update();
+        MovementInput();
     }
 
-    void Movement()
+    void MovementInput()
     {
-        if(Input.GetKey (KeyCode.A))
+        //Jump
+        if (Input.GetKeyDown(KeyCode.Space) && allowMovement)
         {
-            rb.velocity = new Vector2(horizontalSpeed * -1, rb.velocity.y);
-        }
-        else if (Input.GetKey(KeyCode.D))
-        {
-            rb.velocity = new Vector2(horizontalSpeed, rb.velocity.y);
-        }
-        else
-        {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            if (colBottom)
+            {
+                verticalVelocity = jumpForce;
+            }
+            else if (colRight)
+            {
+                verticalVelocity = jumpForce;
+                horizontalVelocity = -speed;
+                gameObject.GetComponent<SpriteRenderer>().flipX = true;
+            }
+            else if (colLeft)
+            {
+                horizontalVelocity = speed;
+                verticalVelocity = jumpForce;
+                gameObject.GetComponent<SpriteRenderer>().flipX = false;
+            }
         }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+        //Left and Right
+        if (Input.GetKey(KeyCode.A) && !colLeft && allowMovement)
         {
-            gameObject.GetComponent<Rigidbody2D>().velocity = new Vector2(gameObject.GetComponent<Rigidbody2D>().velocity.x, 0);
-            rb.AddForce(Vector2.up * jumpForce);
+            horizontalVelocity = -speed;
+            gameObject.GetComponent<SpriteRenderer>().flipX = true;
+        }
+        if (Input.GetKey(KeyCode.D) && !colRight && allowMovement)
+        {
+            horizontalVelocity = speed;
+            gameObject.GetComponent<SpriteRenderer>().flipX = false;
+        }
+        if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false && /*colBottom && */ allowMovement)
+        {
+            horizontalVelocity = 0;
         }
     }
-
 }

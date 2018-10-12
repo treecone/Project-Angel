@@ -9,8 +9,9 @@ public class SkyMoveScript : MonoBehaviour {
     public float jumpForce, speed;
     public float gravity;
     public GameObject lastTouchingCollider;
+    public bool allowMovement;
 
-	void Start ()
+	void Start ()   
     {
 		
 	}
@@ -62,7 +63,7 @@ public class SkyMoveScript : MonoBehaviour {
     void MovementInput ()
     {
         //Jump
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && allowMovement)
         {
             if (colBottom)
             {
@@ -72,25 +73,28 @@ public class SkyMoveScript : MonoBehaviour {
             {
                 verticalVelocity = jumpForce;
                 horizontalVelocity = -5;
+                StartCoroutine(SetBoolAfterTime(0.5f));
             }
             else if (colLeft)
             {
                 horizontalVelocity = 5;
+                verticalVelocity = jumpForce;
+                StartCoroutine(SetBoolAfterTime(0.5f));
             }
         }
 
         //Left and Right
-        if (Input.GetKey(KeyCode.A) && !colLeft)
+        if (Input.GetKey(KeyCode.A) && !colLeft && allowMovement)
         {
             horizontalVelocity = -speed;
             gameObject.GetComponent<SpriteRenderer>().flipX = true;
         }
-        if (Input.GetKey(KeyCode.D) && !colRight)
+        if (Input.GetKey(KeyCode.D) && !colRight && allowMovement)
         {
             horizontalVelocity = speed;
             gameObject.GetComponent<SpriteRenderer>().flipX = false;
         }
-        if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false && colBottom)
+        if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false && colBottom && allowMovement)
         {
             horizontalVelocity = 0;
         }
@@ -107,5 +111,12 @@ public class SkyMoveScript : MonoBehaviour {
             return true;
         }
         else { return false; }
+    }
+
+    IEnumerator SetBoolAfterTime (float timer)
+    {
+        allowMovement = false;
+        yield return new WaitForSeconds(timer);
+        allowMovement = true;
     }
 }
