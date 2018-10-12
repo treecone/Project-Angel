@@ -13,6 +13,8 @@ public class PhysicsScript : MonoBehaviour {
     public bool colLeft, colTop, colRight, colBottom; //This activates when and after first touched
 
     Transform theColliders;
+    public bool leftBothTouching;
+    public bool rightBothTouching;
 
 
     public virtual void Start ()
@@ -26,10 +28,15 @@ public class PhysicsScript : MonoBehaviour {
         CollsionRaycasts();
     }
 
-    void Movement ()
+    public void LateUpdate()
     {
         gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
         gameObject.transform.Translate(Vector2.right * horizontalVelocity * Time.deltaTime);
+    }
+
+    void Movement ()
+    {
+        
 
         //Gravity
         if (colBottom == true)
@@ -47,8 +54,13 @@ public class PhysicsScript : MonoBehaviour {
             bottomCheck = true;
         }
 
-        if (colRight) { if (horizontalVelocity > 0.05f) { horizontalVelocity = 0; verticalVelocity = 0; } if (!colBottom) { verticalVelocity += (gravity / 20); } }
-        if (colLeft) { if (horizontalVelocity < -0.05f) { horizontalVelocity = 0; verticalVelocity = 0; } if (!colBottom) { verticalVelocity += (gravity / 20); } }
+        if (colBottom && colLeft && colRight)
+        {
+            gameObject.transform.Translate(Vector2.up * 0.3f * Time.deltaTime);
+        }
+
+        if (colRight) { if (horizontalVelocity > 0.05f) { horizontalVelocity = 0; verticalVelocity = 0; } if (!colBottom) { if (rightBothTouching) { verticalVelocity += (gravity / 20); } else { verticalVelocity += gravity; } } }
+        if (colLeft) { if (horizontalVelocity < -0.05f) { horizontalVelocity = 0; verticalVelocity = 0; } if (!colBottom) { if (leftBothTouching) { verticalVelocity += (gravity / 20); } else { verticalVelocity += gravity; } } }
         if (colTop) { if (verticalVelocity > 0.05f) { verticalVelocity = 0; } }
     }
 
@@ -62,16 +74,51 @@ public class PhysicsScript : MonoBehaviour {
 
     bool CheckingBothVectors (Vector2 pos1, Vector2 pos2, Vector2 dir)
     {
-        if (RaycastCollision(pos1, dir, 0.2f) != null)
+        int intToBool = 0;
+        if (RaycastCollision(pos1, dir, 0.2f) != null && RaycastCollision (pos2, dir, 0.2f) != null && (dir == Vector2.right || dir == Vector2.left)) //If both are touching
         {
-            return true;
+            intToBool = 2;
+            Debug.Log(dir.ToString());
+        }
+        else if (RaycastCollision(pos1, dir, 0.2f) != null)
+        {
+            intToBool = 1;
         }
         else if (RaycastCollision(pos2, dir, 0.2f) != null)
         {
+            intToBool = 1;
+        }
+        else
+        {
+            intToBool = 0;
+        }
+        //Set the bool
+        if(intToBool == 1)
+        {
+            return true;
+        }
+        else if (intToBool == 2)
+        {
+            if (dir == Vector2.right)
+            {
+                rightBothTouching = true;
+            }
+            else if (dir == Vector2.left)
+            {
+                leftBothTouching = true;
+            }
             return true;
         }
         else
         {
+            if (dir == Vector2.right)
+            {
+                rightBothTouching = false;
+            }
+            else if(dir == Vector2.left)
+            {
+                leftBothTouching = false;
+            }
             return false;
         }
     }
