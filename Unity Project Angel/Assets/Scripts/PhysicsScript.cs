@@ -31,12 +31,14 @@ public class PhysicsScript : MonoBehaviour
     public void LateUpdate()
     {
 
-        if ((colBottom && verticalVelocity > 0) || RaycastCollision(theColliders.Find("BottomLeft").position, Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime)) == null)
+        //Distance to ground is 0 if the object does not hit the ground on this update
+        float distanceToGround = CollisionDistance(theColliders.Find("BottomLeft").position, Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime));
+
+        if ((colBottom && verticalVelocity > 0) || distanceToGround == 0)  
             gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
         else
-        {
-            gameObject.transform.Translate(Vector2.down *
-                (CollisionDistance(theColliders.Find("BottomLeft").position, Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime))));
+        { // our current velocity will move us underground, move the object directly to ground level
+            gameObject.transform.Translate(Vector2.down * distanceToGround);
             verticalVelocity = 0;
         }
 
@@ -116,7 +118,7 @@ public class PhysicsScript : MonoBehaviour
 
     //returns the object that a raycast hits, else returns null
     GameObject RaycastCollision(Vector2 pos, Vector2 dir, float distance)
-    {
+    {  
         RaycastHit2D hit = Physics2D.Raycast(pos, dir, distance);
         Debug.DrawRay(pos, dir * distance, Color.red);
         if (hit.collider != null) return hit.collider.gameObject;
