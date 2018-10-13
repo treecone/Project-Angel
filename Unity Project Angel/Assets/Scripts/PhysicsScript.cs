@@ -30,7 +30,16 @@ public class PhysicsScript : MonoBehaviour
 
     public void LateUpdate()
     {
-        gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
+
+        if ((colBottom && verticalVelocity > 0) || RaycastCollision(theColliders.Find("BottomLeft").position, Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime)) == null)
+            gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
+        else
+        {
+            gameObject.transform.Translate(Vector2.down *
+                (CollisionDistance(theColliders.Find("BottomLeft").position, Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime))));
+            verticalVelocity = 0;
+        }
+
         gameObject.transform.Translate(Vector2.right * horizontalVelocity * Time.deltaTime);
     }
 
@@ -95,6 +104,14 @@ public class PhysicsScript : MonoBehaviour
             leftBothTouching = !(dir == Vector2.left);
             return false;
         }
+    }
+
+    /**
+     * Report the distance to the nearest object within distanceCheck
+     */
+    float CollisionDistance(Vector2 pos, Vector2 dir, float distanceCheck)
+    {
+        return Physics2D.Raycast(pos, dir, distanceCheck).distance;
     }
 
     //returns the object that a raycast hits, else returns null
