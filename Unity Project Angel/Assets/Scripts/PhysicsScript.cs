@@ -57,7 +57,7 @@ public class PhysicsScript : MonoBehaviour
             gameObject.transform.Translate(Vector2.right * horizontalVelocity * Time.deltaTime);
         else
         {
-            gameObject.transform.Translate(Vector2.right * Mathf.Sign(horizontalVelocity) * (distaceToWall[0] -objectSpacing));
+            gameObject.transform.Translate(Vector2.right * Mathf.Sign(horizontalVelocity) * (Mathf.Max(distaceToWall) -objectSpacing));
             horizontalVelocity = 0;
             verticalVelocity = 0;
         }
