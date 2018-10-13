@@ -20,41 +20,39 @@ public class PlayerScript : PhysicsScript {
 
     void MovementInput()
     {
-        //Jump
-        if (Input.GetKeyDown(KeyCode.Space) && allowMovement)
-        {
-            if (colBottom)
+        if (allowMovement){
+            //Jump
+            if (Input.GetKeyDown(KeyCode.Space))
             {
-                verticalVelocity = jumpForce;
+                if (colBottom) verticalVelocity = jumpForce;
+                else if (colRight)
+                {
+                    horizontalVelocity = -speed;
+                    verticalVelocity = jumpForce;
+                    gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                }
+                else if (colLeft)
+                {
+                    horizontalVelocity = speed;
+                    verticalVelocity = jumpForce;
+                    gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                }
             }
-            else if (colRight)
+
+            //Left and Right
+            if (Input.GetKey(KeyCode.A) && !colLeft)
             {
-                verticalVelocity = jumpForce;
                 horizontalVelocity = -speed;
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
             }
-            else if (colLeft)
+            if (Input.GetKey(KeyCode.D) && !colRight)
             {
                 horizontalVelocity = speed;
-                verticalVelocity = jumpForce;
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
             }
-        }
-
-        //Left and Right
-        if (Input.GetKey(KeyCode.A) && !colLeft && allowMovement)
-        {
-            horizontalVelocity = -speed;
-            gameObject.GetComponent<SpriteRenderer>().flipX = true;
-        }
-        if (Input.GetKey(KeyCode.D) && !colRight && allowMovement)
-        {
-            horizontalVelocity = speed;
-            gameObject.GetComponent<SpriteRenderer>().flipX = false;
-        }
-        if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false && /*colBottom && */ allowMovement)
-        {
-            horizontalVelocity = 0;
+            //Original was this: if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false)
+            // WHYYYYYYYYY
+            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)) horizontalVelocity = 0;
         }
     }
 }
