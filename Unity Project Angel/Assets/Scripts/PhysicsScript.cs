@@ -87,7 +87,7 @@ public class PhysicsScript : MonoBehaviour
             }
 
         }
-        else if (colLeft || colRight)
+        else if (leftBothTouching || rightBothTouching)
         { // Wall slide
             verticalVelocity += gravity / 2;
         }
