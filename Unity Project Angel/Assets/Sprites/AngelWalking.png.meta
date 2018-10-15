@@ -1,0 +1,350 @@
+fileFormatVersion: 2
+guid: 38e37212809c4ee44b6154a76cd60fbb
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: AngelWalking_0
+    21300002: AngelWalking_1
+    21300004: AngelWalking_2
+    21300006: AngelWalking_3
+    21300008: AngelWalking_4
+    21300010: AngelWalking_5
+    21300012: AngelWalking_6
+    21300014: AngelWalking_7
+    21300016: AngelWalking_8
+    21300018: AngelWalking_9
+  externalObjects: {}
+  serializedVersion: 7
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: -1
+    mipBias: -100
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 4, y: 96, z: 74, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: 0
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  platformSettings:
+  - serializedVersion: 2
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 4096
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: AngelWalking_0
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 96
+        width: 18
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5735aba2e6ded2b4990317a734171bd0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_1
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 64
+        width: 19
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9f77bdd84b2ea4d4cb030fce7837b001
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_2
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 32
+        width: 18
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b7a127652432a1f4e91d2140a5b06864
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_3
+      rect:
+        serializedVersion: 2
+        x: 4
+        y: 0
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d6a3d29f825b5964e9ef1ecfd25f40e5
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_4
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 32
+        width: 19
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd7c3df541a1500429d42ce3ecd52d06
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_5
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 64
+        width: 18
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c3aab3788146d204b86574a697b9908f
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_6
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 96
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0d89edd74b3a02f4196d6cb834149073
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_7
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 96
+        width: 19
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 347ce9ef2f76cec41ad890b794c7a833
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_8
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 64
+        width: 18
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 99cb36d3c84ca2a478872d552f7bad41
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: AngelWalking_9
+      rect:
+        serializedVersion: 2
+        x: 68
+        y: 32
+        width: 19
+        height: 31
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 38d22978243f98445b5b0c9ffb064e94
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline:
+    - - {x: -44, y: 32}
+      - {x: -44, y: 63}
+      - {x: -25, y: 63}
+      - {x: -26, y: 63}
+      - {x: -26, y: 32}
+    - - {x: -44, y: 0}
+      - {x: -44, y: 32}
+      - {x: -25, y: 32}
+      - {x: -25, y: 0}
+    - - {x: -44, y: -32}
+      - {x: -44, y: -1}
+      - {x: -25, y: -1}
+      - {x: -25, y: -32}
+    - - {x: -44, y: -64}
+      - {x: -44, y: -32}
+      - {x: -25, y: -32}
+      - {x: -25, y: -64}
+    - - {x: -12, y: 32}
+      - {x: -12, y: 64}
+      - {x: 6, y: 64}
+      - {x: 6, y: 32}
+    - - {x: -12, y: 0}
+      - {x: -12, y: 31}
+      - {x: 6, y: 31}
+      - {x: 6, y: 0}
+    - - {x: -12, y: -32}
+      - {x: -12, y: 0}
+      - {x: 7, y: 0}
+      - {x: 7, y: -32}
+    - - {x: 20, y: -32}
+      - {x: 20, y: -1}
+      - {x: 39, y: -1}
+      - {x: 39, y: -32}
+    - - {x: 20, y: 0}
+      - {x: 20, y: 32}
+      - {x: 39, y: 32}
+      - {x: 39, y: 0}
+    - - {x: 20, y: 32}
+      - {x: 20, y: 63}
+      - {x: 39, y: 63}
+      - {x: 39, y: 32}
+    physicsShape: []
+    bones: []
+    spriteID: 79f21b47cef847e4bad6c3d04e6249ef
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

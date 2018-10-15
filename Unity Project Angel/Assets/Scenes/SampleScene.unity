@@ -123,6 +123,7 @@ GameObject:
   - component: {fileID: 73578163}
   - component: {fileID: 73578162}
   - component: {fileID: 73578160}
+  - component: {fileID: 73578161}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -150,9 +151,28 @@ MonoBehaviour:
   colBottom: 0
   leftBothTouching: 1
   rightBothTouching: 0
-  allowMovement: 1
+  allowInput: 1
+  wallJump: 000000
   jumpForce: 6
   speed: 4
+--- !u!95 &73578161
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 73578159}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 01e01571c37063c40bdb22dc786073ad, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &73578162
 SpriteRenderer:
   m_ObjectHideFlags: 0

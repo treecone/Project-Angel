@@ -58,19 +58,25 @@ public class PlayerScript : PhysicsScript
 
 
             //Left and Right
-            if (Input.GetKey(KeyCode.A) && !colLeft)
+            if (Input.GetKey(KeyCode.A) && !colLeft && !Input.GetKey(KeyCode.D))
             {
                 horizontalVelocity = -speed;
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
             }
-            if (Input.GetKey(KeyCode.D) && !colRight)
+            if (Input.GetKey(KeyCode.D) && !colRight && !Input.GetKey(KeyCode.A))
             {
                 horizontalVelocity = speed;
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
             }
             //Original was this: if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false)
             // WHYYYYYYYYY
-            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A)) horizontalVelocity = 0;
+            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+            {
+                horizontalVelocity = 0;
+                gameObject.GetComponent<Animator>().Play("PlayerIdle", 0);
+            }
         }
     }
 
