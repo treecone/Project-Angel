@@ -2,27 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhysicsScript : MonoBehaviour
+public abstract class PhysicsScript : MonoBehaviour
 {
+    /// <summary>
+    /// Theses values are tracked when colliding with the grid
+    /// </summary>
+    public enum SIDES
+    {
+        TOP, BOTTOM, LEFT, RIGHT, 
+        LEFTBODY, RIGHTBODY // used when an object is flush against the grid
+    }
 
-    //The min distance between a physics object and the tilemap
-    private const float objectSpacing = 0.01f;
+    private Dictionary<SIDES, bool> sides;
 
-    //Movement
+    /// Movement
     public float horizontalVelocity, verticalVelocity;
     public float gravity;
 
+    private Transform colliders;
 
-    bool leftCheck, topCheck, rightCheck, bottomCheck; //This is to active when first touched
-    public bool colLeft, colTop, colRight, colBottom; //This activates when and after first touched
 
-    Transform theColliders;
-    public bool leftBothTouching, rightBothTouching;
+    /// The min distance between a physics object and the tilemap
+    private const float objectSpacing = 0.01f;
 
+    public PhysicsScript()
+    {
+        this.sides = new Dictionary<SIDES, bool>();
+        sides.Add(SIDES.TOP, false);
+        sides.Add(SIDES.BOTTOM, false);
+        sides.Add(SIDES.LEFT, false);
+        sides.Add(SIDES.RIGHT, false);
+        sides.Add(SIDES.LEFTBODY, false);
+        sides.Add(SIDES.RIGHTBODY, false);
+    }
 
     public virtual void Start()
     {
-        theColliders = gameObject.transform.Find("ColliderPoints");
+        colliders = gameObject.transform.Find("ColliderPoints");
     }
 
     public virtual void Update()
@@ -32,15 +48,14 @@ public class PhysicsScript : MonoBehaviour
         GravityCalcuation();
     }
 
-
     private void Movement()
     {
         //Distance to ground is 0 if the object does not hit the ground on this update
         float[] distanceToGround = new float[] {
-            CollisionDistance(theColliders.Find("BottomLeft"), Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime)),
-            CollisionDistance(theColliders.Find("BottomRight"), Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime))
+            CollisionDistance(colliders.Find("BottomLeft"), Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime)),
+            CollisionDistance(colliders.Find("BottomRight"), Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime))
         };
-        if ((colBottom && verticalVelocity > 0) || distanceToGround[0] == 0 && distanceToGround[1] == 0)
+        if ((sides[SIDES.BOTTOM] && verticalVelocity > 0) || distanceToGround[0] == 0 && distanceToGround[1] == 0)
             gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
         else
         { // our current velocity will move us underground, move the object directly to ground level
@@ -50,8 +65,8 @@ public class PhysicsScript : MonoBehaviour
 
         float[] distaceToWall = new float[]
         {
-            CollisionDistance(theColliders.Find((Mathf.Sign(horizontalVelocity) > 0)?"TopRight":"TopLeft"), Vector2.right * Mathf.Sign(horizontalVelocity), Mathf.Abs(horizontalVelocity * Time.deltaTime)),
-            CollisionDistance(theColliders.Find((Mathf.Sign(horizontalVelocity) > 0)?"BottomRight":"BottomLeft"), Vector2.right * Mathf.Sign(horizontalVelocity), Mathf.Abs(horizontalVelocity * Time.deltaTime))
+            CollisionDistance(colliders.Find((Mathf.Sign(horizontalVelocity) > 0)?"TopRight":"TopLeft"), Vector2.right * Mathf.Sign(horizontalVelocity), Mathf.Abs(horizontalVelocity * Time.deltaTime)),
+            CollisionDistance(colliders.Find((Mathf.Sign(horizontalVelocity) > 0)?"BottomRight":"BottomLeft"), Vector2.right * Mathf.Sign(horizontalVelocity), Mathf.Abs(horizontalVelocity * Time.deltaTime))
         };
         if (distaceToWall[0] == 0 && distaceToWall[1] == 0)
             gameObject.transform.Translate(Vector2.right * horizontalVelocity * Time.deltaTime);
@@ -63,21 +78,20 @@ public class PhysicsScript : MonoBehaviour
         }
     }
 
-    void GravityCalcuation()
+    private void GravityCalcuation()
     {
-        if (colBottom)
+        if (sides[SIDES.BOTTOM])
         {
-            OneTimeCallDirection("Bottom");
             if (verticalVelocity < 0) verticalVelocity = 0;
-            if (colLeft && colRight)
+            if (sides[SIDES.LEFT] && sides[SIDES.RIGHT])
             { // The object is in the ground
                 gameObject.transform.Translate(Vector2.up * 0.5f * Time.deltaTime);
             }
             else
             { // the object is floating without vertical velocity
                 float[] distanceToGround = new float[] {
-                CollisionDistance(theColliders.Find("BottomLeft"), Vector2.down, Mathf.Infinity),
-                CollisionDistance(theColliders.Find("BottomRight"), Vector2.down, Mathf.Infinity)
+                CollisionDistance(colliders.Find("BottomLeft"), Vector2.down, Mathf.Infinity),
+                CollisionDistance(colliders.Find("BottomRight"), Vector2.down, Mathf.Infinity)
             };
 
                 if (verticalVelocity == 0 && distanceToGround[0] > objectSpacing && distanceToGround[1] > objectSpacing)
@@ -87,36 +101,35 @@ public class PhysicsScript : MonoBehaviour
             }
 
         }
-        else if (leftBothTouching || rightBothTouching)
+        else if (sides[SIDES.LEFTBODY] || sides[SIDES.RIGHTBODY])
         { // Wall slide
             verticalVelocity += gravity / 2;
         }
         else
         {
             verticalVelocity += gravity;
-            bottomCheck = true;
         }
 
 
-        if (colTop && verticalVelocity > 0.05f) verticalVelocity = 0;
+        if (sides[SIDES.TOP] && verticalVelocity > 0.05f) verticalVelocity = 0;
     }
 
-    void CollisionRaycasts()
+    private void CollisionRaycasts()
     {
-        colBottom = CheckingBothVectors(new[] { "BottomLeft", "BottomRight" }, Vector2.down);
-        colRight = CheckingBothVectors(new[] { "BottomRight", "TopRight" }, Vector2.right);
-        colLeft = CheckingBothVectors(new[] { "BottomLeft", "TopLeft" }, Vector2.left);
-        colTop = CheckingBothVectors(new[] { "TopRight", "TopLeft" }, Vector2.up);
+        sides[SIDES.TOP] = CheckingBothVectors(new[] { "TopRight", "TopLeft" }, Vector2.up);
+        sides[SIDES.BOTTOM] = CheckingBothVectors(new[] { "BottomLeft", "BottomRight" }, Vector2.down);
+        sides[SIDES.RIGHT] = CheckingBothVectors(new[] { "BottomRight", "TopRight" }, Vector2.right);
+        sides[SIDES.LEFT] = CheckingBothVectors(new[] { "BottomLeft", "TopLeft" }, Vector2.left);
     }
 
-    bool CheckingBothVectors(string[] pos, Vector2 dir)
+    private bool CheckingBothVectors(string[] pos, Vector2 dir)
     {
-        Vector2 pos1 = theColliders.Find(pos[0]).position;
-        Vector2 pos2 = theColliders.Find(pos[1]).position;
+        Vector2 pos1 = colliders.Find(pos[0]).position;
+        Vector2 pos2 = colliders.Find(pos[1]).position;
         if (RaycastCollision(pos1, dir, objectSpacing * 2) != null && RaycastCollision(pos2, dir, objectSpacing * 2) != null && (dir == Vector2.right || dir == Vector2.left)) //If both are touching
         {
-            rightBothTouching = (dir == Vector2.right);
-            leftBothTouching = (dir == Vector2.left);
+            sides[SIDES.RIGHTBODY] = (dir == Vector2.right);
+            sides[SIDES.LEFTBODY] = (dir == Vector2.left);
             return true;
         }
         else if (RaycastCollision(pos1, dir, objectSpacing * 2) != null || RaycastCollision(pos2, dir, objectSpacing * 2) != null)
@@ -125,50 +138,60 @@ public class PhysicsScript : MonoBehaviour
         }
         else
         {
-            rightBothTouching = (dir == Vector2.right) ? false : rightBothTouching;
-            leftBothTouching = (dir == Vector2.left) ? false : leftBothTouching;
+            if (dir == Vector2.right)
+                sides[SIDES.RIGHTBODY] = false;
+            else if (dir == Vector2.left)
+                sides[SIDES.LEFTBODY] = false;
             return false;
         }
     }
 
+    /// <summary>
+    /// Returns the distance to the object the raycast hit, if none 0
+    /// </summary>
+    /// <param name="collider">A collider that the raycast should start at</param>
+    /// <param name="dir">The direction the raycast travels</param>
+    /// <param name="distance">The distance to travel before terminating</param>
+    /// <returns>The distance to the object hit, otherwise null</returns>
     private float CollisionDistance(Transform collider, Vector2 direction, float distance)
     {
         return CollisionDistance(collider.position, direction, distance);
     }
 
-    /**
-     * Report the distance to the nearest object within distanceCheck
-     */
+    /// <summary>
+    /// Returns the distance to the object the raycast hit, if none 0
+    /// </summary>
+    /// <param name="pos">The position the raycast should begin at</param>
+    /// <param name="dir">The direction the raycast travels</param>
+    /// <param name="distance">The distance to travel before terminating</param>
+    /// <returns>The distance to the object hit, otherwise null</returns>
     private float CollisionDistance(Vector2 pos, Vector2 direction, float distanceCheck)
     {
         return Physics2D.Raycast(pos, direction, distanceCheck).distance;
     }
 
-    //returns the object that a raycast hits, else returns null
-    GameObject RaycastCollision(Vector2 pos, Vector2 dir, float distance)
+    /// <summary>
+    /// Returns the object the raycast hit, if none then null
+    /// </summary>
+    /// <param name="pos">The position the raycast should begin at</param>
+    /// <param name="dir">The direction the raycast travels</param>
+    /// <param name="distance">The distance to travel before terminating</param>
+    /// <returns>The object hit, otherwise null</returns>
+    public GameObject RaycastCollision(Vector2 pos, Vector2 dir, float distance)
     {
         RaycastHit2D hit = Physics2D.Raycast(pos, dir, distance);
-        Debug.DrawRay(pos, dir * distance, Color.red);
         if (hit.collider != null) return hit.collider.gameObject;
         return null;
     }
 
-    void OneTimeCallDirection(string dir)
+    /// <summary>
+    /// Get the sides that are in contact with the grid
+    /// </summary>
+    /// <returns>
+    /// a new dictionary containing the state of the colliding sides
+    /// </returns>
+    public Dictionary<SIDES, bool> getCollsions()
     {
-        switch (dir)
-        {
-            case ("Bottom"):
-                bottomCheck = false;
-                break;
-
-            case ("Left"):
-                break;
-
-            case ("Right"):
-                break;
-
-            case ("Top"):
-                break;
-        }
+        return new Dictionary<SIDES, bool>(sides);
     }
 }
