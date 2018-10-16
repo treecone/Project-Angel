@@ -38,12 +38,18 @@ public abstract class PhysicsScript : MonoBehaviour
 
     public virtual void Start()
     {
-        Transform colliders = gameObject.transform.Find("ColliderPoints");
-        foreach(Transform t in colliders)
+        colliders = gameObject.transform.Find("ColliderPoints");
+        foreach (Transform t in colliders)
         {
-            System.Text.RegularExpressions.MatchCollection matches 
+            System.Text.RegularExpressions.MatchCollection matchCollection
                 = System.Text.RegularExpressions.Regex.Matches(t.name, "[a-z]+|[A-Z]([a-z])*");
-            
+            //string[] matches = new string[matchCollection.Count];
+            //matchCollection.CopyTo(matches, 0);
+            foreach (System.Text.RegularExpressions.Match match in matchCollection)
+            {
+                SIDES side = (SIDES)System.Enum.Parse(typeof(SIDES), match.Value.ToUpper());
+                transforms[side].Add(t);
+            }
         }
     }
 
