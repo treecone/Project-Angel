@@ -14,6 +14,7 @@ public abstract class PhysicsScript : MonoBehaviour
     }
 
     private Dictionary<SIDES, bool> sides;
+    private Dictionary<SIDES, List<Transform>> transforms = new Dictionary<SIDES, List<Transform>>(); 
 
     /// Movement
     public float horizontalVelocity, verticalVelocity;
@@ -28,17 +29,22 @@ public abstract class PhysicsScript : MonoBehaviour
     public PhysicsScript()
     {
         this.sides = new Dictionary<SIDES, bool>();
-        sides.Add(SIDES.TOP, false);
-        sides.Add(SIDES.BOTTOM, false);
-        sides.Add(SIDES.LEFT, false);
-        sides.Add(SIDES.RIGHT, false);
-        sides.Add(SIDES.LEFTBODY, false);
-        sides.Add(SIDES.RIGHTBODY, false);
+        foreach(SIDES side in System.Enum.GetValues(typeof(SIDES)))
+        {
+            sides.Add(side, false);
+            transforms.Add(side, new List<Transform>());
+        }
     }
 
     public virtual void Start()
     {
-        colliders = gameObject.transform.Find("ColliderPoints");
+        Transform colliders = gameObject.transform.Find("ColliderPoints");
+        foreach(Transform t in colliders)
+        {
+            System.Text.RegularExpressions.MatchCollection matches 
+                = System.Text.RegularExpressions.Regex.Matches(t.name, "[a-z]+|[A-Z]([a-z])*");
+            
+        }
     }
 
     public virtual void Update()
