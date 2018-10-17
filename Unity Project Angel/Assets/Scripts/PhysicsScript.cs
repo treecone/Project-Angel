@@ -13,8 +13,8 @@ public abstract class PhysicsScript : MonoBehaviour
         LEFTBODY, RIGHTBODY // used when an object is flush against the grid
     }
 
-    private Dictionary<SIDES, bool> sides;
-    private Dictionary<SIDES, List<Transform>> transforms = new Dictionary<SIDES, List<Transform>>();
+    protected Dictionary<SIDES, bool> sides;
+    protected Dictionary<SIDES, List<Transform>> transforms = new Dictionary<SIDES, List<Transform>>();
 
     /// Movement
     public float horizontalVelocity, verticalVelocity;
@@ -45,8 +45,15 @@ public abstract class PhysicsScript : MonoBehaviour
                 = System.Text.RegularExpressions.Regex.Matches(t.name, "[a-z]+|[A-Z]([a-z])*");
             foreach (System.Text.RegularExpressions.Match match in matchCollection)
             {
-                SIDES side = (SIDES)System.Enum.Parse(typeof(SIDES), match.Value.ToUpper());
-                transforms[side].Add(t);
+                try
+                {
+                    SIDES side = (SIDES)System.Enum.Parse(typeof(SIDES), match.Value.ToUpper());
+                    transforms[side].Add(t);
+                }
+                catch (System.ArgumentException ex)
+                {
+                    Debug.Log("Collider point " + ex + " is not a valid side");
+                }
             }
         }
     }
@@ -70,12 +77,13 @@ public abstract class PhysicsScript : MonoBehaviour
             gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
         else
         { // our current velocity will move us underground, move the object directly to ground level
-            gameObject.transform.Translate(Vector2.down * (min(distanceToGround) - objectSpacing));
+            gameObject.transform.Translate(Vector2.down * (Min(distanceToGround) - objectSpacing));
             verticalVelocity = 0;
         }
 
 
         List<float> distanceToWall = new List<float>();
+        // Find the side that the object is moving towards
         SIDES moveTowards = (Mathf.Sign(horizontalVelocity) > 0) ? SIDES.RIGHT : SIDES.LEFT;
         foreach (Transform transform in transforms[moveTowards])
         {
@@ -89,7 +97,7 @@ public abstract class PhysicsScript : MonoBehaviour
             gameObject.transform.Translate(Vector2.right * horizontalVelocity * Time.deltaTime);
         else
         {
-            gameObject.transform.Translate(Vector2.right * Mathf.Sign(horizontalVelocity) * (min(distanceToWall) - objectSpacing));
+            gameObject.transform.Translate(Vector2.right * Mathf.Sign(horizontalVelocity) * (Max(distanceToWall) - objectSpacing));
             horizontalVelocity = 0;
             verticalVelocity = 0;
         }
@@ -114,7 +122,7 @@ public abstract class PhysicsScript : MonoBehaviour
 
                 if (verticalVelocity == 0 && distanceToGround.TrueForAll(x => x > objectSpacing))
                 {
-                    gameObject.transform.Translate(Vector2.down * (min(distanceToGround) - objectSpacing));
+                    gameObject.transform.Translate(Vector2.down * (Min(distanceToGround) - objectSpacing));
                 }
             }
 
@@ -134,27 +142,23 @@ public abstract class PhysicsScript : MonoBehaviour
 
     private void CollisionRaycasts()
     {
-        sides[SIDES.TOP] = CheckingBothVectors(transforms[SIDES.TOP], Vector2.up);
-        sides[SIDES.BOTTOM] = CheckingBothVectors(transforms[SIDES.BOTTOM], Vector2.down);
-        sides[SIDES.RIGHT] = CheckingBothVectors(transforms[SIDES.RIGHT], Vector2.right);
-        sides[SIDES.LEFT] = CheckingBothVectors(transforms[SIDES.LEFT], Vector2.left);
+        sides[SIDES.TOP] = CheckCollisionPoints(transforms[SIDES.TOP], Vector2.up);
+        sides[SIDES.BOTTOM] = CheckCollisionPoints(transforms[SIDES.BOTTOM], Vector2.down);
+        sides[SIDES.RIGHT] = CheckCollisionPoints(transforms[SIDES.RIGHT], Vector2.right);
+        sides[SIDES.LEFT] = CheckCollisionPoints(transforms[SIDES.LEFT], Vector2.left);
     }
 
 
-    private bool CheckingBothVectors(List<Transform> points, Vector2 dir)
+    private bool CheckCollisionPoints(List<Transform> points, Vector2 dir)
     {
-        Vector2 pos1 = points[0].position;
-        Vector2 pos2 = points[1].position;
-        if (RaycastCollision(pos1, dir, objectSpacing * 2) != null
-                && RaycastCollision(pos2, dir, objectSpacing * 2) != null
-                && (dir == Vector2.right || dir == Vector2.left)
-                ) //If both are touching
+        if (points.TrueForAll(x => RaycastCollision(x.position, dir, objectSpacing * 2) != null)
+                && (dir == Vector2.right || dir == Vector2.left)) //If All vectors touching
         {
             sides[SIDES.RIGHTBODY] = (dir == Vector2.right);
             sides[SIDES.LEFTBODY] = (dir == Vector2.left);
             return true;
         }
-        else if (RaycastCollision(pos1, dir, objectSpacing * 2) != null || RaycastCollision(pos2, dir, objectSpacing * 2) != null)
+        else if (!points.TrueForAll(x => RaycastCollision(x.position, dir, objectSpacing * 2) == null))
         {
             return true;
         }
@@ -212,7 +216,7 @@ public abstract class PhysicsScript : MonoBehaviour
     /// <returns>
     /// a new dictionary containing the state of the colliding sides
     /// </returns>
-    public Dictionary<SIDES, bool> getCollsions()
+    public Dictionary<SIDES, bool> GetCollsions()
     {
         return new Dictionary<SIDES, bool>(sides);
     }
@@ -223,13 +227,13 @@ public abstract class PhysicsScript : MonoBehaviour
     /// <returns>
     /// a new dictionary containing the state of the tranform points
     /// </returns>
-    public Dictionary<SIDES, List<Transform>> getTranforms()
+    public Dictionary<SIDES, List<Transform>> GetTranforms()
     {
         return new Dictionary<SIDES, List<Transform>>(transforms);
     }
 
 
-    public static float min(List<float> s)
+    public static float Min(List<float> s)
     {
         if (s.Count < 1) return Mathf.NegativeInfinity;
         float min = s[0];
@@ -240,7 +244,7 @@ public abstract class PhysicsScript : MonoBehaviour
         return min;
     }
 
-    public static float max(List<float> s)
+    public static float Max(List<float> s)
     {
         if (s.Count < 1) return Mathf.NegativeInfinity;
         float min = s[0];
