@@ -56,7 +56,7 @@ public class PlayerScript : PhysicsScript
 
 
             //Left and Right
-            if (Input.GetKey(KeyCode.A) && !getCollsions()[SIDES.RIGHT])
+            if (Input.GetKey(KeyCode.A) && !getCollsions()[SIDES.LEFT])
             {
                 horizontalVelocity = -speed;
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
