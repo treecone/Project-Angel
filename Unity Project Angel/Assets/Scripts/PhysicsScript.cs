@@ -127,7 +127,7 @@ public abstract class PhysicsScript : MonoBehaviour
             }
 
         }
-        else if (sides[SIDES.LEFTBODY] || sides[SIDES.RIGHTBODY])
+        else if (verticalVelocity <= 0 && (sides[SIDES.LEFTBODY] || sides[SIDES.RIGHTBODY]))
         { // Wall slide
             verticalVelocity += gravity / 2;
         }
