@@ -151,15 +151,17 @@ public abstract class PhysicsScript : MonoBehaviour
 
     private bool CheckCollisionPoints(List<Transform> points, Vector2 dir)
     {
-        if (points.TrueForAll(x => RaycastCollision(x.position, dir, objectSpacing * 2) != null)
-                && (dir == Vector2.right || dir == Vector2.left)) //If All vectors touching
-        {
-            sides[SIDES.RIGHTBODY] = (dir == Vector2.right);
-            sides[SIDES.LEFTBODY] = (dir == Vector2.left);
-            return true;
+        bool hitAll = true, hitOne = false;
+        foreach (Transform x in points) {
+            bool hit = RaycastCollision(x.position, dir, objectSpacing * 2) != null;
+            if (hitAll) hitAll = hit;
+            if (!hitOne) hitOne = hit;
         }
-        else if (!points.TrueForAll(x => RaycastCollision(x.position, dir, objectSpacing * 2) == null))
+
+        if (hitOne) //If All vectors touching
         {
+            sides[SIDES.RIGHTBODY] = (dir == Vector2.right)?hitAll:sides[SIDES.RIGHTBODY];
+            sides[SIDES.LEFTBODY] = (dir == Vector2.left)?hitAll:sides[SIDES.LEFTBODY];
             return true;
         }
         else
