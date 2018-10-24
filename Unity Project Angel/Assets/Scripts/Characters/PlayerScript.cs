@@ -29,22 +29,23 @@ public class PlayerScript : PhysicsScript
     void MovementInput()
     {
 
-        wallJump[0] = (wallJump[0]) ? !(sides[SIDES.BOTTOM] || (wallJump[1] == sides[SIDES.RIGHT] && wallJump[2] == sides[SIDES.LEFT])) : false;
+        wallJump[0] = (wallJump[0]) ? !(ContactingSide(SIDES.BOTTOM) || (wallJump[1] == ContactingSide(SIDES.RIGHT) 
+                                                                            && wallJump[2] == ContactingSide(SIDES.LEFT))) : false;
         if (allowInput && !wallJump[0])
         {
             //Jump
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (sides[SIDES.BOTTOM] || sides[SIDES.LEFTBODY] || sides[SIDES.RIGHTBODY])
+                if (ContactingSide(SIDES.BOTTOM) || ContactingSide(SIDES.RIGHT) || ContactingSide(SIDES.LEFT))
                     verticalVelocity = jumpForce; // Normal Jump
-                if (sides[SIDES.RIGHTBODY] && !sides[SIDES.BOTTOM]) // Right Wall jump
+                if (FlushWithSide(SIDES.RIGHT) && !ContactingSide(SIDES.BOTTOM)) // Right Wall jump
                 {
                     horizontalVelocity = -speed;
                     wallJump = new bool[] { true, false, true };
                     gameObject.GetComponent<SpriteRenderer>().flipX = true;
                     return;
                 }
-                else if (sides[SIDES.LEFTBODY] && !sides[SIDES.BOTTOM])
+                else if (FlushWithSide(SIDES.LEFT) && !ContactingSide(SIDES.BOTTOM))
                 {
                     horizontalVelocity = speed;
                     wallJump = new bool[] { true, true, false };
@@ -56,13 +57,13 @@ public class PlayerScript : PhysicsScript
 
 
             //Left and Right
-            if (Input.GetKey(KeyCode.A) && !sides[SIDES.LEFT])
+            if (Input.GetKey(KeyCode.A) && !ContactingSide(SIDES.LEFT))
             {
                 horizontalVelocity = -speed;
                 gameObject.GetComponent<SpriteRenderer>().flipX = true;
                 gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
             }
-            if (Input.GetKey(KeyCode.D) && !sides[SIDES.RIGHT])
+            if (Input.GetKey(KeyCode.D) && !ContactingSide(SIDES.RIGHT))
             {
                 horizontalVelocity = speed;
                 gameObject.GetComponent<SpriteRenderer>().flipX = false;

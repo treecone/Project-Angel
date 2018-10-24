@@ -5,13 +5,12 @@ using System.Text;
 
 namespace Assets.Scripts.Tiles.Ground
 {
-    abstract class Ground
+    interface IGround
     {
         /// <summary>
-        /// When a character touches an object containing this script 
-        /// this method is called
+        /// Behavior can be applied to a character when they touch the ground
         /// </summary>
         /// <param name="character">The character touching this object</param>
-        public abstract void Touch(Characters.CharacterScript character);
+        void Touch(Characters.CharacterScript character);
     }
 }
