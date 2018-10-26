@@ -13,7 +13,10 @@ public abstract class PhysicsScript : MonoBehaviour
     {
         TOP, BOTTOM, LEFT, RIGHT
     }
-
+    
+    /// <summary>
+    /// Stores the objects that a character touches
+    /// </summary>
     protected HashSet<GameObject> touching = new HashSet<GameObject>(); 
     protected Dictionary<SIDES, List<GameObject>> sides;
     protected Dictionary<SIDES, List<Transform>> transforms = new Dictionary<SIDES, List<Transform>>();
@@ -23,6 +26,9 @@ public abstract class PhysicsScript : MonoBehaviour
     public float gravity;
     private CharacterScript character;
     private Transform colliders;
+
+    // Mask
+    int GroundMask = 0;
 
 
     /// The min distance between a physics object and the tilemap
@@ -40,6 +46,7 @@ public abstract class PhysicsScript : MonoBehaviour
 
     public virtual void Start(CharacterScript character)
     {
+        this.GroundMask = LayerMask.GetMask("Ground");
         this.character = character;
         colliders = gameObject.transform.Find("ColliderPoints");
         foreach (Transform t in colliders)
@@ -205,7 +212,7 @@ public abstract class PhysicsScript : MonoBehaviour
     }
 
     /// <summary>
-    /// Returns the distance to the object the raycast hit, if none 0
+    /// Returns the distance from the 
     /// </summary>
     /// <param name="pos">The position the raycast should begin at</param>
     /// <param name="dir">The direction the raycast travels</param>
@@ -213,7 +220,7 @@ public abstract class PhysicsScript : MonoBehaviour
     /// <returns>The distance to the object hit, otherwise null</returns>
     private float CollisionDistance(Vector2 pos, Vector2 direction, float distanceCheck)
     {
-        return Physics2D.Raycast(pos, direction, distanceCheck).distance;
+        return Physics2D.Raycast(pos, direction, distanceCheck, GroundMask).distance;
     }
 
     /// <summary>

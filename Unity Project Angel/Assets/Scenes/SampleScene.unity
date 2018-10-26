@@ -139,14 +139,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 73578159}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1ce098f487d812244853f7a124541426, type: 3}
+  m_Script: {fileID: 11500000, guid: 870ab042ab543b44aa133885a745ecb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  horizontalVelocity: 0
+  horizontalVelocity: 4
   verticalVelocity: 0
-  gravity: -0.2
+  gravity: -4
   allowInput: 1
-  jumpForce: 6
+  jumpForce: 11
   speed: 4
 --- !u!95 &73578161
 Animator:
@@ -239,7 +239,8 @@ GameObject:
   - component: {fileID: 209435508}
   - component: {fileID: 209435507}
   - component: {fileID: 209435506}
-  m_Layer: 0
+  - component: {fileID: 209435509}
+  m_Layer: 9
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -253,8 +254,8 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 209435502}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0.05, z: 0}
+  m_LocalScale: {x: 0.993, y: 0.993, z: 0.993}
   m_Children: []
   m_Father: {fileID: 1268949786}
   m_RootOrder: 0
@@ -465,20 +466,20 @@ CompositeCollider2D:
   m_ColliderPaths:
   - m_Collider: {fileID: 209435508}
     m_ColliderPaths:
-    - - X: -50000000
-        Y: -20000000
-      - X: -50000000
-        Y: 70000000
-      - X: -60000000
-        Y: 70000000
-      - X: -60000000
-        Y: -20000000
+    - - X: -49649996
+        Y: -19860000
+      - X: -49649996
+        Y: 69510000
+      - X: -59579996
+        Y: 69510000
+      - X: -59579996
+        Y: -19860000
   m_CompositePaths:
     m_Paths:
-    - - {x: -5, y: 7}
-      - {x: -6, y: 7}
-      - {x: -6, y: -2}
-      - {x: -5, y: -2}
+    - - {x: -4.9649997, y: 6.951}
+      - {x: -5.9579997, y: 6.951}
+      - {x: -5.9579997, y: -1.9860001}
+      - {x: -4.9649997, y: -1.9860001}
   m_VertexDistance: 0.0005
 --- !u!50 &209435507
 Rigidbody2D:
@@ -513,6 +514,17 @@ TilemapCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 1
   m_Offset: {x: 0, y: 0}
+--- !u!114 &209435509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 209435502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da7d82ba17a38a24da66e98fe26dc8c8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,7 +627,7 @@ GameObject:
   m_Layer: 0
   m_Name: BottomLeft
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -716,6 +728,7 @@ GameObject:
   - component: {fileID: 1294420058}
   - component: {fileID: 1294420057}
   - component: {fileID: 1294420056}
+  - component: {fileID: 1294420061}
   m_Layer: 0
   m_Name: Tilemap
   m_TagString: Untagged
@@ -2616,6 +2629,17 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!114 &1294420061
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1294420054}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8339f94b57bb15f4ba10d31f74124993, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1311720541
 GameObject:
   m_ObjectHideFlags: 0
@@ -2659,7 +2683,7 @@ GameObject:
   m_Layer: 0
   m_Name: TopRight
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2728,7 +2752,7 @@ GameObject:
   m_Layer: 0
   m_Name: TopLeft
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -2756,7 +2780,7 @@ GameObject:
   m_Layer: 0
   m_Name: BottomRight
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
