@@ -36,7 +36,7 @@ public class PlayerScript : PhysicsScript
             //Jump
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                if (ContactingSide(SIDES.BOTTOM) || ContactingSide(SIDES.RIGHT) || ContactingSide(SIDES.LEFT))
+                if (ContactingSide(SIDES.BOTTOM) || FlushWithSide(SIDES.RIGHT) || FlushWithSide(SIDES.LEFT))
                     verticalVelocity = jumpForce; // Normal Jump
                 if (FlushWithSide(SIDES.RIGHT) && !ContactingSide(SIDES.BOTTOM)) // Right Wall jump
                 {
