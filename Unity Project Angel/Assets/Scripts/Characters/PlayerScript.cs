@@ -2,79 +2,82 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerScript : PhysicsScript
-{
+namespace Assets.Scripts.Characters {
 
-    public bool allowInput = true;
-    /// <summary>
-    /// Mid wall jump if index 0 is true
-    /// finalize wall jump if you collide with
-    /// the opposite wall or hit the ground
-    /// </summary>
-    private bool[] wallJump = { false, false, false };
-
-    public float jumpForce, speed;
-
-    public override void Start()
-    {
-        base.Start();
-    }
-
-    public override void Update()
-    {
-        base.Update();
-        MovementInput();
-    }
-
-    void MovementInput()
+    public class PlayerScript : CharacterScript
     {
 
-        wallJump[0] = (wallJump[0]) ? !(ContactingSide(SIDES.BOTTOM) || (wallJump[1] == ContactingSide(SIDES.RIGHT) 
-                                                                            && wallJump[2] == ContactingSide(SIDES.LEFT))) : false;
-        if (allowInput && !wallJump[0])
+        public bool allowInput = true;
+        /// <summary>
+        /// Mid wall jump if index 0 is true
+        /// finalize wall jump if you collide with
+        /// the opposite wall or hit the ground
+        /// </summary>
+        private bool[] wallJump = { false, false, false };
+
+        public float jumpForce, speed;
+
+        public override void Start()
         {
-            //Jump
-            if (Input.GetKeyDown(KeyCode.Space))
+            base.Start();
+        }
+
+        public override void Update()
+        {
+            base.Update();
+            MovementInput();
+        }
+
+        void MovementInput()
+        {
+
+            wallJump[0] = (wallJump[0]) ? !(ContactingSide(SIDES.BOTTOM) || (wallJump[1] == ContactingSide(SIDES.RIGHT)
+                                                                                && wallJump[2] == ContactingSide(SIDES.LEFT))) : false;
+            if (allowInput && !wallJump[0])
             {
-                if (ContactingSide(SIDES.BOTTOM) || FlushWithSide(SIDES.RIGHT) || FlushWithSide(SIDES.LEFT))
-                    verticalVelocity = jumpForce; // Normal Jump
-                if (FlushWithSide(SIDES.RIGHT) && !ContactingSide(SIDES.BOTTOM)) // Right Wall jump
+                //Jump
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    if (ContactingSide(SIDES.BOTTOM) || FlushWithSide(SIDES.RIGHT) || FlushWithSide(SIDES.LEFT))
+                        verticalVelocity = jumpForce; // Normal Jump
+                    if (FlushWithSide(SIDES.RIGHT) && !ContactingSide(SIDES.BOTTOM)) // Right Wall jump
+                    {
+                        horizontalVelocity = -speed;
+                        wallJump = new bool[] { true, false, true };
+                        gameObject.GetComponent<SpriteRenderer>().flipX = true;
+                        return;
+                    }
+                    else if (FlushWithSide(SIDES.LEFT) && !ContactingSide(SIDES.BOTTOM))
+                    {
+                        horizontalVelocity = speed;
+                        wallJump = new bool[] { true, true, false };
+                        gameObject.GetComponent<SpriteRenderer>().flipX = false;
+                        return;
+                    }
+
+                }
+
+
+                //Left and Right
+                if (Input.GetKey(KeyCode.A) && !ContactingSide(SIDES.LEFT))
                 {
                     horizontalVelocity = -speed;
-                    wallJump = new bool[] { true, false, true };
                     gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                    return;
+                    gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
                 }
-                else if (FlushWithSide(SIDES.LEFT) && !ContactingSide(SIDES.BOTTOM))
+                if (Input.GetKey(KeyCode.D) && !ContactingSide(SIDES.RIGHT))
                 {
                     horizontalVelocity = speed;
-                    wallJump = new bool[] { true, true, false };
                     gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                    return;
+                    gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
                 }
-
-            }
-
-
-            //Left and Right
-            if (Input.GetKey(KeyCode.A) && !ContactingSide(SIDES.LEFT))
-            {
-                horizontalVelocity = -speed;
-                gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
-            }
-            if (Input.GetKey(KeyCode.D) && !ContactingSide(SIDES.RIGHT))
-            {
-                horizontalVelocity = speed;
-                gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
-            }
-            //Original was this: if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false)
-            // WHYYYYYYYYY
-            if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
-            {
-                horizontalVelocity = 0;
-                gameObject.GetComponent<Animator>().Play("PlayerIdle", 0);
+                //Original was this: if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false)
+                // WHYYYYYYYYY
+                if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
+                {
+                    horizontalVelocity = 0;
+                    gameObject.GetComponent<Animator>().Play("PlayerIdle", 0);
+                }
             }
         }
     }

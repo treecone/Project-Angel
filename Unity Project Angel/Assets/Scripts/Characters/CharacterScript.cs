@@ -5,7 +5,16 @@ using System.Text;
 
 namespace Assets.Scripts.Characters
 {
-    class CharacterScript
+    public abstract class CharacterScript : PhysicsScript
     {
+        private void Update()
+        {
+            base.Update();
+        }
+
+        private void Start()
+        {
+            base.Start();
+        }
     }
 }
