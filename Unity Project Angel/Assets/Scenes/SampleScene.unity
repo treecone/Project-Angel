@@ -146,7 +146,7 @@ MonoBehaviour:
   verticalVelocity: 0
   gravity: -4
   allowInput: 1
-  jumpForce: 11
+  jumpForce: 50
   speed: 4
 --- !u!95 &73578161
 Animator:
@@ -729,7 +729,7 @@ GameObject:
   - component: {fileID: 1294420057}
   - component: {fileID: 1294420056}
   - component: {fileID: 1294420061}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Tilemap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
