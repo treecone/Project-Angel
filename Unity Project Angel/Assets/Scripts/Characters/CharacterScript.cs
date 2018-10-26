@@ -14,7 +14,7 @@ namespace Assets.Scripts.Characters
 
         private void Start()
         {
-            base.Start();
+            base.Start(this);
         }
     }
 }

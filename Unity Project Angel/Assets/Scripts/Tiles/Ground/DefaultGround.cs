@@ -9,9 +9,14 @@ namespace Assets.Scripts.Tiles.Ground
 {
     class DefaultGround : MonoBehaviour, Ground.IGround
     {
+        public void Part(CharacterScript character)
+        {
+            Debug.Log("Character Parted from Me");
+        }
+
         public void Touch(CharacterScript character)
         {
-            throw new NotImplementedException();
+            Debug.Log("Character Touched Me");
         }
     }
 }

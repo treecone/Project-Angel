@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using Assets.Scripts.Characters;
+using Assets.Scripts.Tiles;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,13 +14,14 @@ public abstract class PhysicsScript : MonoBehaviour
         TOP, BOTTOM, LEFT, RIGHT
     }
 
+    protected HashSet<GameObject> touching = new HashSet<GameObject>(); 
     protected Dictionary<SIDES, List<GameObject>> sides;
     protected Dictionary<SIDES, List<Transform>> transforms = new Dictionary<SIDES, List<Transform>>();
 
     /// Movement
     public float horizontalVelocity, verticalVelocity;
     public float gravity;
-
+    private CharacterScript character;
     private Transform colliders;
 
 
@@ -35,8 +38,9 @@ public abstract class PhysicsScript : MonoBehaviour
         }
     }
 
-    public virtual void Start()
+    public virtual void Start(CharacterScript character)
     {
+        this.character = character;
         colliders = gameObject.transform.Find("ColliderPoints");
         foreach (Transform t in colliders)
         {
@@ -141,23 +145,51 @@ public abstract class PhysicsScript : MonoBehaviour
 
     private void CollisionRaycasts()
     {
-        sides[SIDES.TOP] = CheckGroundColliders(transforms[SIDES.TOP], Vector2.up);
-        sides[SIDES.BOTTOM] = CheckGroundColliders(transforms[SIDES.BOTTOM], Vector2.down);
-        sides[SIDES.RIGHT] = CheckGroundColliders(transforms[SIDES.RIGHT], Vector2.right);
-        sides[SIDES.LEFT] = CheckGroundColliders(transforms[SIDES.LEFT], Vector2.left);
+        HashSet<GameObject> newTouching = new HashSet<GameObject>();
+        newTouching.UnionWith(CheckGroundColliders(SIDES.TOP, Vector2.up));
+        newTouching.UnionWith(CheckGroundColliders(SIDES.BOTTOM, Vector2.down));
+        newTouching.UnionWith(CheckGroundColliders(SIDES.RIGHT, Vector2.right));
+        newTouching.UnionWith(CheckGroundColliders(SIDES.LEFT, Vector2.left));
+
+        HashSet<GameObject> dup = new HashSet<GameObject>(newTouching);
+        dup.ExceptWith(touching);
+        foreach(GameObject gameObject in dup)
+        {
+            foreach(ITile tile in gameObject.GetComponents(typeof(ITile)))
+            {
+                tile.Touch(character);
+            }
+        }
+        dup = new HashSet<GameObject>(newTouching);
+        touching.ExceptWith(dup);
+        foreach (GameObject gameObject in touching)
+        {
+            foreach (ITile tile in gameObject.GetComponents(typeof(ITile)))
+            {
+                tile.Part(character);
+            }
+        }
+
+
+        touching = newTouching;
     }
 
 
-    private List<GameObject> CheckGroundColliders(List<Transform> points, Vector2 dir)
+    private HashSet<GameObject> CheckGroundColliders(SIDES side, Vector2 dir)
     {
+        HashSet<GameObject> toucing = new HashSet<GameObject>();
         List<GameObject> colliders = new List<GameObject>();
-        foreach (Transform x in points) {
-            GameObject temp = RaycastCollision(x.position, dir, objectSpacing * 2); 
-            if (temp != null && temp.GetComponent(typeof(Assets.Scripts.Tiles.Ground.IGround)) != null)
-                colliders.Add(temp);
+        foreach (Transform x in transforms[side]) {
+            GameObject temp = RaycastCollision(x.position, dir, objectSpacing * 2);
+            if (temp != null)
+            {
+                toucing.Add(temp);
+                if (temp.GetComponent(typeof(Assets.Scripts.Tiles.Ground.IGround)) != null)
+                    colliders.Add(temp);
+            }
         }
-
-        return colliders;
+        sides[side] = colliders;
+        return toucing;
     }
 
     /// <summary>
