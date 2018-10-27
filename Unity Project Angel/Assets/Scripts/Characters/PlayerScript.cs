@@ -57,22 +57,36 @@ namespace Assets.Scripts.Characters {
                 if (Input.GetKey(KeyCode.A) && !ContactingSide(SIDES.LEFT))
                 {
                     horizontalVelocity = -speed;
-                    gameObject.GetComponent<SpriteRenderer>().flipX = true;
-                    gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
                 }
                 if (Input.GetKey(KeyCode.D) && !ContactingSide(SIDES.RIGHT))
                 {
                     horizontalVelocity = speed;
-                    gameObject.GetComponent<SpriteRenderer>().flipX = false;
-                    gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
+                    
+                    
                 }
                 //Original was this: if (!Input.GetKey(KeyCode.D) != false && !Input.GetKey(KeyCode.A) != false)
                 // WHYYYYYYYYY
                 if (!Input.GetKey(KeyCode.D) && !Input.GetKey(KeyCode.A))
                 {
                     horizontalVelocity = 0;
-                    gameObject.GetComponent<Animator>().Play("PlayerIdle", 0);
+                    //
                 }
+            }
+        }
+
+        public override void Idle()
+        {
+            gameObject.GetComponent<Animator>().Play("PlayerIdle", 0);
+        } 
+
+        public override void Moving()
+        {
+            if (horizontalVelocity != 0) {
+                gameObject.GetComponent<SpriteRenderer>().flipX = horizontalVelocity < 0;
+                gameObject.GetComponent<Animator>().Play("PlayerWalking", 0);
+            } else if(horizontalVelocity == 0)
+            {
+                gameObject.GetComponent<Animator>().Play("PlayerIdle", 0);
             }
         }
     }

@@ -11,5 +11,22 @@ namespace Assets.Scripts.Characters
         {
             base.Start(this);
         }
+
+
+        public override void Update()
+        {
+            base.Update();
+            if (verticalVelocity != 0 || horizontalVelocity != 0)
+            {
+                Moving();
+            } else
+            {
+                Idle();
+            }
+        }
+
+        public abstract void Idle();
+        public abstract void Moving();
+
     }
 }
