@@ -78,16 +78,18 @@ public abstract class PhysicsScript : MonoBehaviour
     private void Movement()
     {
         List<float> distanceToGround = new List<float>();
-        foreach (Transform transform in transforms[SIDES.BOTTOM])
+        foreach (Transform transform in (verticalVelocity > 0)?transforms[SIDES.TOP]:transforms[SIDES.BOTTOM])
         {
-            distanceToGround.Add(CollisionDistance(transform, Vector2.down, Mathf.Abs(verticalVelocity * Time.deltaTime)));
+            distanceToGround.Add(CollisionDistance(transform, 
+                (verticalVelocity > 0) ? Vector2.up : Vector2.down, 
+                Mathf.Abs(verticalVelocity * Time.deltaTime)));
         }
 
         if ((ContactingSide(SIDES.BOTTOM) && verticalVelocity > 0) || distanceToGround.TrueForAll(x => x == 0))
             gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
         else
         { // our current velocity will move us underground, move the object directly to ground level
-            gameObject.transform.Translate(Vector2.down * (Min(distanceToGround) - objectSpacing));
+            gameObject.transform.Translate(Vector2.up * (Min(distanceToGround) - objectSpacing));
             verticalVelocity = 0;
         }
 
