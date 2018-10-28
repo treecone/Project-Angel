@@ -15,8 +15,6 @@ namespace Assets.Scripts.Characters {
         /// </summary>
         private bool[] wallJump = { false, false, false };
 
-        public float jumpForce, speed;
-
         public override void Update()
         {
             base.Update();
@@ -71,6 +69,13 @@ namespace Assets.Scripts.Characters {
                     horizontalVelocity = 0;
                     //
                 }
+
+                if(onLadder && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)))
+                {
+                    verticalVelocity = 0;
+                    gravity = 0;
+                    gameObject.transform.Translate(Vector2.up * speed * Time.deltaTime * ((Input.GetKey(KeyCode.W)) ? 1 : -1));
+                }
             }
         }
 
@@ -88,6 +93,11 @@ namespace Assets.Scripts.Characters {
             {
                 gameObject.GetComponent<Animator>().Play("PlayerIdle", 0);
             }
+        }
+
+        public override void Ladder()
+        {
+            // throw new System.NotImplementedException();
         }
     }
 }

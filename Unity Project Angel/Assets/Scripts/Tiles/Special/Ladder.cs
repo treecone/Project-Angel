@@ -11,12 +11,14 @@ namespace Assets.Scripts.Tiles.Special
     {
         public void Part(CharacterScript character)
         {
-            Debug.Log("Parted Ladder");
+            character.gravity = -0.2f;
+            character.SetLadder(false);
         }
 
         public void Touch(CharacterScript character)
-        {
-            Debug.Log("Touched Ladder");
+        { 
+            character.SetLadder(true);
         }
+
     }
 }
