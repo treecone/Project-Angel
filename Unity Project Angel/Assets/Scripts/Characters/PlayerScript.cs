@@ -72,10 +72,14 @@ namespace Assets.Scripts.Characters {
 
                 if(onLadder && (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.S)))
                 {
-                    verticalVelocity = 0;
+                    verticalVelocity = speed * ((Input.GetKey(KeyCode.W)) ? 1 : -1);
                     gravity = 0;
-                    gameObject.transform.Translate(Vector2.up * speed * Time.deltaTime * ((Input.GetKey(KeyCode.W)) ? 1 : -1));
+                    //gameObject.transform.Translate(Vector2.up * speed * Time.deltaTime * ((Input.GetKey(KeyCode.W)) ? 1 : -1));
+                } else if(onLadder && Input.GetKeyUp(KeyCode.W) || Input.GetKeyUp(KeyCode.S))
+                {
+                    verticalVelocity = 0;
                 }
+
             }
         }
 
