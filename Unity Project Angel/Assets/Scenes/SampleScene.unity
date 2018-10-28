@@ -148,7 +148,7 @@ MonoBehaviour:
   Health: 0
   allowInput: 1
   jumpForce: 10
-  speed: 1
+  speed: 4
 --- !u!95 &73578161
 Animator:
   serializedVersion: 3
@@ -480,7 +480,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxDisplacement: 3
   currentDisplacement: 0
-  speed: 0.2
+  speed: 3
   backForth: 1
 --- !u!1 &519420028
 GameObject:

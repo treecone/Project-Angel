@@ -21,7 +21,9 @@ namespace Assets.Scripts.Tiles.Ground
         private void Update()
         {
             currentDisplacement += speed * Time.deltaTime;
-            if (backForth && Math.Abs(currentDisplacement) > maxDisplacement) speed *= -1;
+            if (backForth && Math.Abs(currentDisplacement) > maxDisplacement &&
+                Math.Sign(speed) == Math.Sign(currentDisplacement)) speed *= -1;
+
             gameObject.transform.Translate(Vector2.right * speed * Time.deltaTime);
 
             foreach(CharacterScript character in contactingCharacters)
