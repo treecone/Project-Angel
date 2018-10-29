@@ -18,7 +18,7 @@ namespace Assets.Scripts.Tiles.Ground
         public bool backForth = false;
 
 
-        private void Update()
+        private void LateUpdate()
         {
             currentDisplacement += speed * Time.deltaTime;
             if (backForth && Math.Abs(currentDisplacement) > maxDisplacement &&
@@ -39,7 +39,9 @@ namespace Assets.Scripts.Tiles.Ground
 
         public void Touch(CharacterScript character)
         {
-            if(character.GetCollsions()[PhysicsScript.SIDES.BOTTOM].Contains(gameObject))
+            Dictionary<PhysicsScript.SIDES, List<GameObject>> contacts = character.GetCollsions();
+            if (contacts[PhysicsScript.SIDES.BOTTOM].Contains(gameObject) || 
+                contacts[(speed > 0)?PhysicsScript.SIDES.LEFT:PhysicsScript.SIDES.RIGHT].Contains(gameObject))
             {
                 contactingCharacters.Add(character);
             }

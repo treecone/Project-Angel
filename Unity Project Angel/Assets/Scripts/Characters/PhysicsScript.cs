@@ -89,7 +89,7 @@ public abstract class PhysicsScript : MonoBehaviour
             gameObject.transform.Translate(Vector2.up * verticalVelocity * Time.deltaTime);
         else
         { // our current velocity will move us underground, move the object directly to ground level
-            gameObject.transform.Translate(Vector2.up * (Min(distanceToGround) - objectSpacing));
+            gameObject.transform.Translate(Vector2.up * Mathf.Sign(verticalVelocity) * (Min(distanceToGround) - objectSpacing));
             verticalVelocity = 0;
         }
 
@@ -111,7 +111,7 @@ public abstract class PhysicsScript : MonoBehaviour
         {
             gameObject.transform.Translate(Vector2.right * Mathf.Sign(horizontalVelocity) * (Max(distanceToWall) - objectSpacing));
             horizontalVelocity = 0;
-            verticalVelocity = 0;
+            //verticalVelocity = 0;
         }
     }
 
